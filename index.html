@@ -87,7 +87,21 @@
 
         <!-- EN / ZH Language Selection Trigger Button -->
         <button onclick="toggleLanguage()" class="border border-neutral-800 hover:border-apexOrange bg-black px-2.5 py-1 text-[10px] font-mono text-neutral-500 hover:text-white rounded transition-colors flex items-center gap-1">
-          🌐 <span id="btn-lang-toggle" class="font-black text-neutral-300 hover:text-white">EN / 中文</span>
+          <svg
+           xmlns="http://www.w3.org/2000/svg"
+           viewBox="0 0 24 24"
+           fill="none"
+           stroke="currentColor"
+           stroke-width="2"
+           stroke-linecap="round"
+           stroke-linejoin="round"
+           class="w-3.5 h-3.5 text-white">
+           <circle cx="12" cy="12" r="10"></circle>
+           <line x1="2" y1="12" x2="22" y2="12"></line>
+           <path d="M12 2a15.3 15.3 0 0 1 0 20"></path>
+           <path d="M12 2a15.3 15.3 0 0 0 0 20"></path>
+          </svg>
+           <span id="btn-lang-toggle" class="font-black text-neutral-300 hover:text-white">EN / 中文</span>
         </button>
       </div>
 
@@ -121,16 +135,16 @@
 
       <!-- Navigation & Step Switcher controls footer -->
       <div class="flex justify-between items-center pt-6 mt-8 border-t border-neutral-900" id="nav-footer">
-        <button id="btn-back" onclick="navigateStep(-1)" class="flex items-center gap-1.5 font-mono text-[10px] uppercase tracking-wider text-neutral-500 hover:text-white transition-colors">
-          ◀ BACK / 返回
+        <button id="btn-back" onclick="navigateStep(-1)" class="flex items-center gap-1.5 font-mono text-[16px] uppercase tracking-wider text-neutral-500 hover:text-white transition-colors">
+          ◀ 返回
         </button>
 
         <span id="system-running-slogan" class="text-[9px] font-mono text-neutral-600 uppercase tracking-widest hidden sm:inline">
           CTE RACING HIGH PERFORMANCE SYSTEMS
         </span>
 
-        <button id="btn-next" onclick="navigateStep(1)" class="bg-apexOrange hover:bg-orange-500 text-black font-mono font-black text-[10px] uppercase px-5 py-2.5 rounded shadow-lg transition-all hover:translate-x-0.5">
-          NEXT STEP / 下一步 ▶
+        <button id="btn-next" onclick="navigateStep(1)" class="bg-apexOrange hover:bg-orange-500 text-black font-mono font-black text-[16px] uppercase px-5 py-2.5 rounded shadow-lg transition-all hover:translate-x-0.5">
+          下一步 ▶
         </button>
       </div>
 
@@ -203,7 +217,7 @@
         s4Title: "Your Custom CCM Build Is Ready",
         s4Desc: "Review your final specifications below and submit your configuration for engineering review.",
         dwgTitle: "FINAL CONFIGURATION PREVIEW", chassisBuild: "CHASSIS BUILD", ccmBrakePaired: "CARBON CERAMIC BRAKE INTEGRATED",
-        buildSlip: "CTE BUILD SLIP", clearanceConfig: "CONFIGURATION SUMMARY", ccmSpec: "CCM SPEC",
+        buildSlip: "CTE CARBON CERAMIC BRAKE CONFIGURATION SUMMARY", clearanceConfig: "FINAL OVERVIEW",
         frontChassis: "FRONT CHASSIS CONFIG", rearChassis: "REAR CHASSIS CONFIG",
         calModel: "CALIPER MODEL:", rotorProfile: "ROTOR PROFILE:", padPart: "PAD PART NO:", estPrice: "ESTIMATED PRICE:",
         fullNamePlaceholder: "FULL NAME", emailPlaceholder: "EMAIL ADDRESS", carPlaceholder: "VEHICLE MODEL (e.g., Porsche 911 GT3 / 2024)",
@@ -230,14 +244,14 @@
         c1: "頂尖碳陶瓷科技，提供極致的熱穩定性與制動信賴感。",
         c2: "精準計算各項物理數據，確保每一寸配置皆符合原廠幾何規格。",
         c3: "專注於駕馭信心，為您打造賽道與街道兼具的精準配置。",
-        startBtn: "START",
+        startBtn: "開始配置",
         
         // Step 1
         s1Title: "選擇您的煞車升級配置佈局",
         s1Desc: "請選擇您要將車輛的哪一個軸向升級為高性能 CCM 碳纖維陶瓷煞車系統。",
         axleFront: "前軸配置", axleRear: "後軸配置", trackRec: "前後軸完整配置",
-        frontUpgrade: "僅升級前輪", frontUpgradeDesc: "更換前輪單體卡鉗與高強度碳陶碟盤，提供最核心的高速減速物理咬合力。",
-        rearUpgrade: "僅升級後輪", rearUpgradeDesc: "升級後輪煞車結構，支援現代化跑車一體式電子手煞車（EPB）伺服電機整合。",
+        frontUpgrade: "升級前輪", frontUpgradeDesc: "更換前輪單體卡鉗與高強度碳陶碟盤，提供最核心的高速減速物理咬合力。",
+        rearUpgrade: "升級後輪", rearUpgradeDesc: "升級後輪煞車結構，支援現代化跑車一體式電子手煞車（EPB）伺服電機整合。",
         dualUpgrade: "前後輪完整升級", dualUpgradeDesc: "同時更換前後軸完整系統，提供賽道與高速行駛最完美的前後制動穩定性。",
         
         // Step 2
@@ -263,14 +277,14 @@
         s4Title: "您的專屬 CCM 配置已就緒",
         s4Desc: " 請確認下方的最終配置規格，並將您的配置傳送給 CTE 專業團隊進行後續空間校核。",
         dwgTitle: "配置實體相片預覽", chassisBuild: "Chassis 軸配置", ccmBrakePaired: "CARBON CERAMIC 碳陶煞車系統已配對",
-        buildSlip: "CTE CARBON CERAMIC BRAKE 配置藍圖單", clearanceConfig: "安裝 clearance 空間校核", ccmSpec: "CCM 賽道規格",
+        buildSlip: "CTE CARBON CERAMIC BRAKE 最終配置摘要", clearanceConfig: "配置內容與產品規格",
         frontChassis: "前軸底盤煞車配置", rearChassis: "後軸底盤煞車配置",
-        calModel: "卡鉗型號:", rotorProfile: "對應碟盤:", padPart: "來令片型號:", estPrice: "評估費用:",
+        calModel: "卡鉗型號:", rotorProfile: "對應碟盤:", padPart: "來令片型號:", estPrice: "預估費用:",
         fullNamePlaceholder: "您的姓名 / FULL NAME", emailPlaceholder: "您的信箱 / EMAIL ADDRESS", carPlaceholder: "您的車款型號 (例如：Porsche 911 GT3 / 2024)",
-        activateSoul: "傳送精準配置需求 →",
+        activateSoul: "將我的配置傳送給 CTE 專業團隊 →",
         specTransmitted: "✓ 煞車配置技術藍圖已成功寄送", buildRef: "客製配置底盤編號:",
-        successMsg: "您的 CCM 配置已成功送出。CTE 工程團隊將確認您的配置內容，並儘快與您聯繫。",
-        restart: "重新進行配置 / Restart",
+        successMsg: "您的 CCM 配置已成功送出。CTE 專業團隊將儘快與您聯繫。",
+        restart: "重新進行配置",
         
         // Warnings
         alertPosition: "請先選擇您的煞車升級位置。", alertFrontRim: "請選擇您的前輪圈直徑尺寸。",
@@ -379,10 +393,11 @@
       if (!rim) return "";
       if (isFront) {
         if (rim <= 16) return "290mm";
-        if (rim === 17) return "350mm";
+        if (rim === 17) return "360mm";
         if (rim === 18) return "380mm";
-        if (rim === 19) return "410mm";
-        if (rim >= 20) return "440mm";
+        if (rim === 19) return "400mm";
+        if (rim === 20) return "410mm";
+        if (rim >= 21) return "440mm";
       } else {
         if (rim === 18) return "380mm";
         if (rim === 19) return "390mm";
@@ -473,9 +488,7 @@
     window.toggleEPB = function(checked) {
       playSfx('click');
       config.hasEPB = checked;
-      if (checked && config.rearRim === 20) {
-        config.rearRim = null;
-      }
+
       syncStateRibbons();
       renderStepContent();
     }
@@ -665,7 +678,7 @@ ${payloadText}
         }).join('');
         document.getElementById('progress-dots').innerHTML = dotsHTML;
         document.getElementById('current-step-num').innerText = currentStep;
-        document.getElementById('btn-back').style.opacity = currentStep === 1 ? '0.2' : '1';
+
         document.getElementById('btn-next').style.display = (currentStep === TOTAL_STEPS || currentStep === 3) ? 'none' : 'block';
       }
 
@@ -731,7 +744,7 @@ ${payloadText}
                 <div class="text-[10px] font-mono text-neutral-500 mb-1">03 / ${getT('trackRec')}</div>
                 <div class="text-base font-black group-hover:text-apexOrange transition-colors uppercase">${getT('dualUpgrade')}</div>
                 <p class="text-[11px] text-neutral-500 mt-2 leading-relaxed">${getT('dualUpgradeDesc')}</p>
-                <div class="absolute bottom-3 right-3 text-neutral-700 font-mono text-xs group-hover:text-apexOrange transition-colors">ALL ➔</div>
+                <div class="absolute bottom-3 right-3 text-neutral-700 font-mono text-xs group-hover:text-apexOrange transition-colors">03 ➔</div>
               </button>
             </div>
           </div>
@@ -771,10 +784,19 @@ ${payloadText}
                     ${getT('rearWheelDia')}
                   </label>
                   <div id="rim-container-rear" class="flex flex-wrap gap-2">
-                    ${[18, 19, 20, 21].map(size => {
-                      const isDisabled = config.hasEPB && size === 20;
-                      return `<button data-size="${size}" ${isDisabled ? 'disabled' : ''} onclick="selectRim('rear', ${size})" class="w-12 h-11 font-mono text-xs font-bold border rounded transition-all ${isDisabled ? 'opacity-20 cursor-not-allowed border-neutral-900' : (config.rearRim === size ? 'bg-racingRed text-white border-racingRed font-black shadow-lg scale-105' : 'bg-neutral-900/60 border-neutral-800 hover:border-neutral-700 text-neutral-300')}">${size}"</button>`
-                    }).join('')}
+                    ${[18, 19, 20, 21].map(size => `
+                    <button
+                     data-size="${size}"
+                     onclick="selectRim('rear', ${size})"
+                     class="w-12 h-11 font-mono text-xs font-bold border rounded transition-all ${
+                      config.rearRim === size
+                      ? 'bg-racingRed text-white border-racingRed font-black shadow-lg scale-105'
+                      : 'bg-neutral-900/60 border-neutral-800 hover:border-neutral-700 text-neutral-300'
+                     }"
+                    >
+                    ${size}"
+                    </button>
+                   `).join('')}
                   </div>
                   ${config.rearRim ? `<div class="mt-4 text-[11px] text-neutral-400 font-mono animate-fadeIn">${getT('maxDiscHint')}<strong class="text-racingRed">${getMaxDiscSize(config.rearRim, false)}</strong></div>` : ''}
                 </div>
@@ -797,7 +819,7 @@ ${payloadText}
                       <button onclick="toggleEPB(true)" class="flex-1 py-2 text-[11px] font-mono border rounded transition-colors ${config.hasEPB ? 'border-racingRed bg-racingRed/10 text-racingRed font-bold' : 'border-neutral-800 text-neutral-500 hover:border-neutral-700'}">${getT('yesEPB')}</button>
                       <button onclick="toggleEPB(false)" class="flex-1 py-2 text-[11px] font-mono border rounded transition-colors ${!config.hasEPB ? 'border-racingRed bg-racingRed/10 text-racingRed font-bold' : 'border-neutral-800 text-neutral-500 hover:border-neutral-700'}">${getT('noEPB')}</button>
                     </div>
-                    ${config.hasEPB ? `<div class="mt-4 p-3 bg-red-950/20 border border-red-900/50 rounded text-[10px] text-racingRed leading-relaxed font-mono animate-fadeIn">${getT('epbWarning')}</div>` : ''}
+            
                   </div>
                 ` : ''}
               </div>
@@ -859,7 +881,7 @@ ${payloadText}
                       <span class="text-apexOrange font-black text-sm md:text-base tracking-widest uppercase">${getT('buildSlip')}</span>
                       <p class="text-[9px] md:text-[10px] text-neutral-500 mt-1">${getT('clearanceConfig')}</p>
                     </div>
-                    <span class="text-[9px] bg-red-950 text-racingRed font-bold px-2.5 py-1 rounded border border-red-900">${getT('ccmSpec')}</span>
+
                   </div>
 
                   ${(config.position === 'front' || config.position === 'both') ? `
@@ -899,9 +921,9 @@ ${payloadText}
                   ` : ''}
 
                   <div class="border-t border-neutral-900 pt-4 mt-2 flex justify-between items-center text-sm md:text-base font-black">
-                    <span class="text-neutral-400">${getT('estPrice')}</span>
-                    <span class="text-apexOrange tracking-widest font-mono bg-neutral-950/80 px-3 py-2 rounded border border-neutral-900">
-                      USD $ ________________
+                    <span class="text-apexOrange text-sm">${getT('estPrice')}</span>
+                    <span class="text-apexOrange tracking-widest font-mono bg-neutral-950/80 border-neutral-900">
+                      USD$ ______
                     </span>
                   </div>
 
@@ -943,25 +965,37 @@ ${payloadText}
               </div>
 
               <!-- Right: Visualizer -->
-              <div class="md:col-span-5 flex flex-col gap-5 relative h-full z-10">
-                <div class="text-[10px] md:text-xs font-mono text-neutral-500 uppercase tracking-widest border-b border-neutral-850 pb-2">
+              <div class="md:col-span-5 flex flex-col relative h-full z-10">
+               <div class="bg-gradient-to-br from-neutral-900 to-black border border-neutral-850 rounded-xl p-6 font-mono text-xs text-neutral-300 shadow-2xl h-full flex flex-col">              
+                <div class="mb-6">
+                 <div class="text-white font-black text-sm md:text-base tracking-widest uppercase">
                   ${getT('dwgTitle')}
                 </div>
 
-                <div class="flex flex-col gap-6 h-full justify-center">
+  ${(config.position === 'front' || config.position === 'both') ? `
+    <div class="text-[10px] font-mono text-neutral-500 uppercase mt-2">
+      FRONT: <span class="text-white font-bold">${config.selectedFrontCaliper?.model}</span>
+    </div>
+  ` : ''}
+
+  ${(config.position === 'rear' || config.position === 'both') ? `
+    <div class="text-[10px] font-mono text-neutral-500 uppercase mt-1">
+      REAR: <span class="text-white font-bold">${config.selectedRearCaliper?.model}</span>
+    </div>
+  ` : ''}
+</div>
+
+                <div class="flex flex-col gap-6 flex-1 justify-center">
                   
                   ${(config.position === 'front' || config.position === 'both') ? `
                     <div class="relative w-full flex flex-col group">
-                      <div class="absolute top-2 left-3 text-[10px] font-mono text-apexOrange uppercase font-bold z-20 bg-black/90 px-2 py-0.5 rounded border border-neutral-800">
-                        FRONT: ${config.selectedFrontCaliper?.model}
-                      </div>
-                      <div class="w-full bg-gradient-to-br from-neutral-900 to-black rounded-xl border border-neutral-800 flex items-center justify-center p-6 overflow-hidden relative min-h-[160px] md:min-h-[200px] shadow-inner">
+                      <div class="w-full flex items-center justify-center overflow-hidden relative min-h-[220px] md:min-h-[300px]">
                         <div class="absolute inset-0 bg-apexOrange/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"></div>
                         
                         <img 
                           src="${config.selectedFrontCaliper?.image}" 
                           alt="${config.selectedFrontCaliper?.model}" 
-                          class="object-contain w-full max-h-[140px] md:max-h-[180px] drop-shadow-[0_10px_20px_rgba(0,0,0,0.8)] transition-transform duration-500 group-hover:scale-110 relative z-10"
+                          class="object-contain w-full max-h-[240px] md:max-h-[300px] drop-shadow-[0_10px_20px_rgba(0,0,0,0.8)] transition-transform duration-500 group-hover:scale-110 relative z-10"
                           id="img-front-final"
                           onerror="this.style.display='none'; document.getElementById('svg-fallback-front').classList.remove('hidden');"
                         />
@@ -979,16 +1013,13 @@ ${payloadText}
 
                   ${(config.position === 'rear' || config.position === 'both') ? `
                     <div class="relative w-full flex flex-col group ${config.position === 'both' ? 'mt-2' : ''}">
-                      <div class="absolute top-2 left-3 text-[10px] font-mono text-racingRed uppercase font-bold z-20 bg-black/90 px-2 py-0.5 rounded border border-neutral-800">
-                        REAR: ${config.selectedRearCaliper?.model}
-                      </div>
-                      <div class="w-full bg-gradient-to-br from-neutral-900 to-black rounded-xl border border-neutral-800 flex items-center justify-center p-6 overflow-hidden relative min-h-[160px] md:min-h-[200px] shadow-inner">
+                      <div class="w-full flex items-center justify-center overflow-hidden relative min-h-[220px] md:min-h-[300px]">
                         <div class="absolute inset-0 bg-racingRed/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"></div>
                         
                         <img 
                           src="${config.selectedRearCaliper?.image}" 
                           alt="${config.selectedRearCaliper?.model}" 
-                          class="object-contain w-full max-h-[140px] md:max-h-[180px] drop-shadow-[0_10px_20px_rgba(0,0,0,0.8)] transition-transform duration-500 group-hover:scale-110 relative z-10"
+                          class="object-contain w-full max-h-[240px] md:max-h-[300px] drop-shadow-[0_10px_20px_rgba(0,0,0,0.8)] transition-transform duration-500 group-hover:scale-110 relative z-10"
                           id="img-rear-final"
                           onerror="this.style.display='none'; document.getElementById('svg-fallback-rear').classList.remove('hidden');"
                         />
