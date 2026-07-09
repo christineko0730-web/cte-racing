@@ -69,9 +69,7 @@
       
       <!-- Brand Logo / Slanted Slogan (Clickable to reset) -->
       <div onclick="restartWorkflow()" class="flex items-center gap-3 cursor-pointer hover:opacity-80 transition-opacity">
-        <div class="bg-gradient-to-r from-apexOrange to-racingRed text-black font-black px-4 py-1.5 text-xs tracking-widest rounded-sm transform -skew-x-12 shadow-lg">
-          CTE RACING
-        </div>
+        <img src="pic/CarbonTE.png" alt="CTE RACING" class="h-8 w-auto" />
         <div class="h-4 w-[1px] bg-neutral-800 hidden sm:block"></div>
         <span id="header-subtitle" class="text-[9px] uppercase tracking-wider text-neutral-400 font-mono">
           CARBON CERAMIC BRAKE INTELLIGENCE
@@ -100,13 +98,13 @@
   <main class="relative z-10 flex-grow max-w-5xl w-full mx-auto px-4 py-8 md:py-12 flex items-center justify-center">
     
     <!-- Outer Interactive Card -->
-    <div class="w-full bg-[#111316]/95 border border-neutral-800/80 rounded-2xl p-6 md:p-10 shadow-2xl backdrop-blur-md relative overflow-hidden">
+    <div class="w-full bg-[#111316]/95 border border-neutral-800/80 rounded-2xl p-6 md:p-10 shadow-2xl backdrop-blur-md relative overflow-hidden" id="main-card">
       
       <!-- Slanted gradient line accent -->
       <div class="absolute top-0 right-0 w-44 h-[3px] bg-gradient-to-r from-racingRed to-apexOrange"></div>
 
       <!-- Progress Tracking Bar -->
-      <div class="flex items-center justify-between mb-8 pb-4 border-b border-neutral-900">
+      <div class="flex items-center justify-between mb-8 pb-4 border-b border-neutral-900" id="progress-header">
         <span class="text-xs font-mono text-apexOrange tracking-widest font-black flex items-center gap-2">
           <span class="inline-block w-2.5 h-2.5 rounded-full bg-racingRed animate-ping"></span>
           <span id="lbl-step-num">STEP</span> <span id="current-step-num">1</span> <span id="lbl-step-of">OF</span> <span id="total-step-num">4</span>
@@ -117,12 +115,12 @@
       </div>
 
       <!-- Live Dynamic Workspace Content Frame -->
-      <div id="step-content" class="step-fade-in min-h-[300px] flex flex-col justify-center">
+      <div id="step-content" class="step-fade-in min-h-[300px] flex flex-col justify-center relative">
         <!-- Rendered by Configurator Engine script -->
       </div>
 
       <!-- Navigation & Step Switcher controls footer -->
-      <div class="flex justify-between items-center pt-6 mt-8 border-t border-neutral-900">
+      <div class="flex justify-between items-center pt-6 mt-8 border-t border-neutral-900" id="nav-footer">
         <button id="btn-back" onclick="navigateStep(-1)" class="flex items-center gap-1.5 font-mono text-[10px] uppercase tracking-wider text-neutral-500 hover:text-white transition-colors">
           ◀ BACK / 返回
         </button>
@@ -144,7 +142,7 @@
   <footer class="relative z-10 border-t border-neutral-950 bg-black/95 px-4 py-6 text-center">
     <div class="max-w-6xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-4 text-[9px] font-mono text-neutral-500 uppercase tracking-widest">
       <div class="flex items-center gap-1">
-        <span id="footer-tag">● CARBON CERAMIC CALIPER ARCHITECTS</span>
+        <span id="footer-tag">● HIGH-PERFORMANCE CARBON CERAMIC BRAKE SYSTEMS</span>
       </div>
       <span id="footer-copyright">© 2026 CTE RACING. ALL RIGHTS RESERVED.</span>
     </div>
@@ -154,7 +152,9 @@
        BILINGUAL DICTIONARY & LOGICAL STATE ENGINE
        ========================================== -->
   <script>
-    let activeLang = 'zh'; // Default: traditional chinese ('zh'), supports English ('en')
+    let activeLang = 'zh'; // Default: traditional chinese ('zh')
+    let carouselTimer = null;
+    const WELCOME_IMAGES = ['pic/cover 1.jpg', 'pic/cover 2.jpg', 'pic/cover 3.jpg', 'pic/cover 4.jpg'];
 
     const TRANSLATIONS = {
       en: {
@@ -165,6 +165,13 @@
         footerTag: "● HIGH-PERFORMANCE CARBON CERAMIC BRAKE SYSTEMS",
         footerCopyright: "© 2026 CTE RACING. ALL RIGHTS RESERVED.",
         
+        // Welcome Page
+        welcomeTitle: "CTE RACING CARBON CERAMIC CONFIGURATOR",
+        c1: "Top-tier carbon ceramic technology, delivering ultimate thermal stability and braking confidence.",
+        c2: "Precise physical data calculation ensures every configuration meets OEM geometry.",
+        c3: "Focused on driving confidence, creating a precision configuration for both track and street.",
+        startBtn: "START CONFIGURATION",
+
         // Step 1
         s1Title: "Select Your Brake Upgrade Layout",
         s1Desc: "Select the axle configuration for your CCM Carbon Ceramic Brake System upgrade.",
@@ -181,7 +188,8 @@
         yesOEM: "YES / OEM Wheels", noOEM: "NO / Aftermarket",
         qEPB: "Is the vehicle equipped with an Electronic Parking Brake (EPB)?",
         yesEPB: "YES / EPB Equipped", noEPB: "NO / Standard Mechanical",
-        epbWarning: "※ Engineering Notice: Electronic Parking Brake (EPB) calipers are structurally incompatible with 20-inch inner barrel profiles.",
+        epbWarning: "※ Engineering Notice: CTE Racing does not provide 20-inch inner barrel specifications for Electronic Parking Brake (EPB) rear calipers due to structural limitations.",
+        maxDiscHint: "Maximum corresponding carbon ceramic rotor size for this rim: ",
         
         // Step 3 (Grade Selection)
         s3Title: "Driving Scenario Configuration",
@@ -197,9 +205,9 @@
         dwgTitle: "FINAL CONFIGURATION PREVIEW", chassisBuild: "CHASSIS BUILD", ccmBrakePaired: "CARBON CERAMIC BRAKE INTEGRATED",
         buildSlip: "CTE BUILD SLIP", clearanceConfig: "CONFIGURATION SUMMARY", ccmSpec: "CCM SPEC",
         frontChassis: "FRONT CHASSIS CONFIG", rearChassis: "REAR CHASSIS CONFIG",
-        calModel: "CALIPER MODEL:", padPart: "PAD PART NO:", estPrice: "ESTIMATED PRICE:",
+        calModel: "CALIPER MODEL:", rotorProfile: "ROTOR PROFILE:", padPart: "PAD PART NO:", estPrice: "ESTIMATED PRICE:",
         fullNamePlaceholder: "FULL NAME", emailPlaceholder: "EMAIL ADDRESS", carPlaceholder: "VEHICLE MODEL (e.g., Porsche 911 GT3 / 2024)",
-        activateSoul: "SEND MY CONFIGURATION TO A CTE SPECIALIST →",
+        activateSoul: "SUBMIT PRECISION CONFIGURATION ➔",
         specTransmitted: "✓ SPECIFICATION BLUEPRINT TRANSMITTED", buildRef: "Chassis Build Reference:",
         successMsg: "Your CCM configuration has been successfully submitted. The CTE team will review your configuration and contact you soon.",
         restart: "Restart configuration",
@@ -213,9 +221,16 @@
         subtitle: "碳陶剎車系統智能選購助理",
         lblLayout: "升級位置", lblFront: "前輪圈", lblRear: "後輪圈", pending: "等待選擇",
         lblStep: "步驟", lblOf: "之", back: "◀ 返回", next: "下一步 ▶",
-        system: "CTE RACING 高性能制動系統配置",
+        system: "CTE 高性能制動系統配置",
         footerTag: "● 高性能碳陶煞車系統",
         footerCopyright: "© 2026 CTE RACING. 保留所有權利。",
+
+        // Welcome Page
+        welcomeTitle: "CTE 碳陶瓷制動配置系統",
+        c1: "頂尖碳陶瓷科技，提供極致的熱穩定性與制動信賴感。",
+        c2: "精準計算各項物理數據，確保每一寸配置皆符合原廠幾何規格。",
+        c3: "專注於駕馭信心，為您打造賽道與街道兼具的精準配置。",
+        startBtn: "START",
         
         // Step 1
         s1Title: "選擇您的煞車升級配置佈局",
@@ -226,14 +241,15 @@
         dualUpgrade: "前後輪完整升級", dualUpgradeDesc: "同時更換前後軸完整系統，提供賽道與高速行駛最完美的前後制動穩定性。",
         
         // Step 2
-        s2Title: "指定您的輪圈/鋼框尺寸",
-        s2Desc: "碟盤的最大尺寸與安裝安全高度，完全取決於輪框內徑空間。請點選正確的直徑尺寸：",
+        s2Title: "指定您的輪圈尺寸",
+        s2Desc: "碟盤的最大尺寸與卡鉗相容性完全取決於輪框內徑空間。請點選正確的直徑尺寸：",
         frontWheelDia: "前輪圈直徑 (吋)", rearWheelDia: "後輪圈直徑 (吋)",
         qOEM: "您目前使用的是否為原廠輪框 (OEM)？",
         yesOEM: "YES / 是原廠框", noOEM: "NO / 改裝框",
         qEPB: "您的車輛是否具備電子手煞車 (EPB) 功能？",
         yesEPB: "YES / 具備 EPB", noEPB: "NO / 無 EPB",
-        epbWarning: "※ 工程提示：因電子機構幾何與安裝裕度限制，20 吋輪框無法對應 EPB 一體式卡鉗規格，請重新評估您的輪圈尺寸。",
+        epbWarning: "※ 工程提示：因電子機構幾何與安裝裕度限制，本公司目前未提供 20 吋輪框規格的 EPB 電子手煞後輪卡鉗。",
+        maxDiscHint: "此尺寸輪圈最高可對應的碳陶瓷碟盤尺寸：",
         
         // Step 3 (Grade Selection)
         s3Title: "駕駛情境與需求等級",
@@ -244,16 +260,16 @@
         gradeUltra: "ULTRA / 頂級效能", descUltra: "針對大馬力車型或重度極限操駕，提供最高峰值的夾緊力與制動穩定性。",
         
         // Step 4 (Result)
-        s4Title: "您的專屬 CCM 配置已完成",
-        s4Desc: " 請確認下方的最終配置規格，並將您的配置傳送給 CTE 專業團隊進行後續確認。",
+        s4Title: "您的專屬 CCM 配置已就緒",
+        s4Desc: " 請確認下方的最終配置規格，並將您的配置傳送給 CTE 專業團隊進行後續空間校核。",
         dwgTitle: "配置實體相片預覽", chassisBuild: "Chassis 軸配置", ccmBrakePaired: "CARBON CERAMIC 碳陶煞車系統已配對",
         buildSlip: "CTE CARBON CERAMIC BRAKE 配置藍圖單", clearanceConfig: "安裝 clearance 空間校核", ccmSpec: "CCM 賽道規格",
         frontChassis: "前軸底盤煞車配置", rearChassis: "後軸底盤煞車配置",
-        calModel: "卡鉗型號:", padPart: "搭配來令片型號:", estPrice: "評估費用:",
+        calModel: "卡鉗型號:", rotorProfile: "對應碟盤:", padPart: "來令片型號:", estPrice: "評估費用:",
         fullNamePlaceholder: "您的姓名 / FULL NAME", emailPlaceholder: "您的信箱 / EMAIL ADDRESS", carPlaceholder: "您的車款型號 (例如：Porsche 911 GT3 / 2024)",
-        activateSoul: "提交配置，由 CTE 專業團隊為您服務 →",
+        activateSoul: "傳送精準配置需求 →",
         specTransmitted: "✓ 煞車配置技術藍圖已成功寄送", buildRef: "客製配置底盤編號:",
-        successMsg: "您的 CCM 配置已成功送出。CTE 團隊將確認您的配置內容，並儘快與您聯繫。",
+        successMsg: "您的 CCM 配置已成功送出。CTE 工程團隊將確認您的配置內容，並儘快與您聯繫。",
         restart: "重新進行配置 / Restart",
         
         // Warnings
@@ -263,25 +279,24 @@
       }
     };
 
-    // Databases logically restructured without Rotor profiling
+    // Databases logically restructured (Models exactly aligned with business rules)
     const FRONT_CALIPERS_DB = [
-      { model: 'CF4421', pistons: '4 POT', padModel: 'CBL99068', tag: 'Classic Agile / 輕巧靈敏', description: '優化簧下重量，提供敏捷且線性的制動反饋。', color: '#FF6A00', image: 'pic/CF4421.png' },
-      { model: 'CM5411', pistons: '4 POT', padModel: 'CBL99061', tag: 'Sport Light / 運動輕量', description: '卓越的散熱效率與極致輕量化，適合高頻率運動操駕。', color: '#FFFFFF', image: 'pic/CM5411.png' },
-      { model: 'CF5421', pistons: '4 POT', padModel: 'CBL99062', tag: 'Endurance Spec / 耐久規格', description: '專為高強度駕駛設計，確保連續高溫下的熱穩定性。', color: '#FF1E27', image: 'pic/CM5421.png' },
-      { model: 'CF8621 / CF8622', pistons: '6 POT', padModel: 'CBL99065', tag: 'Ultimate Lightweight / 極致輕量配置', description: '針對減輕轉動慣量優化，提供極致的操駕靈活性與精準制動。', color: '#FFFFFF', image: 'pic/CF8621.png' },
-      { model: 'CM8611', pistons: '6 POT', padModel: 'CBL99049', tag: 'Track Master / 賽道全能', description: '高抗扭矩設計，為激烈操駕提供卓越的制動穩定性。', color: '#FF6A00', image: 'pic/CM8611.png' },
-      { model: 'CM9611', pistons: '6 POT', padModel: 'CBL99051', tag: 'Ultra Performance / 頂級效能配置', description: '極大化摩擦面積，為大動力車款提供巔峰的制動極限與熱穩定性。', color: '#FF1E27', image: 'pic/CM9611.png' },
-      { model: 'CM9612', pistons: '6 POT', padModel: 'CBL99049', tag: 'Track Balanced / 賽道精準配置', description: '完美的制動力與散熱配比，提供堅實且高度線性的制動駕馭信心。', color: '#FFFFFF', image: 'pic/CM9612.png' }
+      { model: 'CF4421', padModel: 'CBL99068', tag: 'Classic Agile', color: '#FF6A00', image: 'pic/CF4421.png' },
+      { model: 'CM5411', padModel: 'CBL99061', tag: 'Sport Light', color: '#FFFFFF', image: 'pic/CM5411.png' },
+      { model: 'CF5421', padModel: 'CBL99062', tag: 'Endurance Spec', color: '#FF1E27', image: 'pic/CM5421.png' },
+      { model: 'CF8621 / CF8622', padModel: 'CBL99065', tag: 'Ultimate Lightweight', color: '#FFFFFF', image: 'pic/CF8621.png' },
+      { model: 'CM8611', padModel: 'CBL99049', tag: 'Track Master', color: '#FF6A00', image: 'pic/CM8611.png' },
+      { model: 'CM9611 / CM9612', padModel: 'CBL99051', tag: 'Ultra Performance', color: '#FF1E27', image: 'pic/CM9611.png' }
     ];
 
     const REAR_CALIPERS_DB = [
-      { model: 'CM2411', pistons: '4 POT', padModel: 'CBL99061', tag: 'Track Bias / 後輪賽道配比', description: '精準調校後輪煞車比例，確保極限操駕時的動態平衡。', image: 'pic/CM2411.png' },
-      { model: 'CF2421', pistons: '4 POT', padModel: 'CBL99068', tag: 'Street Perf / 後輪性能配置', description: '優化摩擦係數，為標準與性能車款提供理想的制動支援。', image: 'pic/CF2421.png' },
-      { model: 'EB2221', pistons: '2 POT (EPB)', padModel: 'CBL99057', tag: 'EPB Smart Forged / 電子手煞整合', description: '專為搭載電子手煞車之現代化車款設計的鍛造升級方案。', image: 'pic/EB2221.png' }
+      { model: 'CM2411', padModel: 'CBL99061', tag: 'Track Bias', image: 'pic/CM2411.png' },
+      { model: 'CF2421', padModel: 'CBL99068', tag: 'Street Perf', image: 'pic/CF2421.png' },
+      { model: 'EB2221', padModel: 'CBL99057', tag: 'EPB Smart Forged', image: 'pic/EB2221.png' }
     ];
 
     const TOTAL_STEPS = 4;
-    let currentStep = 1;
+    let currentStep = 0; // Starts at 0 for Welcome Page
     let config = {
       position: null,
       frontRim: null,
@@ -290,7 +305,9 @@
       hasEPB: false,
       grade: null, 
       selectedFrontCaliper: null,
-      selectedRearCaliper: null
+      selectedRearCaliper: null,
+      frontDisc: null,
+      rearDisc: null
     };
 
     let userData = { name: '', email: '', car: '' };
@@ -350,7 +367,7 @@
       document.getElementById('btn-back').innerText = getT('back');
       document.getElementById('btn-next').innerText = getT('next');
       document.getElementById('header-subtitle').innerText = getT('subtitle');
-      document.getElementById('total-step-num').innerText = TOTAL_STEPS;
+      document.getElementById('btn-lang-toggle').innerText = (activeLang === 'zh') ? 'EN / 中文' : 'EN / 中文';
       syncStateRibbons();
       renderStepContent();
     };
@@ -358,43 +375,67 @@
     // ==========================================
     // DATA FILTERING ENGINE (BUSINESS RULES)
     // ==========================================
-    function processFrontCaliper() {
-      let r = config.frontRim;
-      let g = config.grade || 'SPORT'; 
-      let model = 'CF4421'; // Safest Fallback
-      
-      if (r === 15 || r === 16) model = 'CF4421';
-      else if (r === 17) model = 'CM5411';
-      else if (r === 18) {
-        if (g === 'STREET' || g === 'SPORT') model = 'CF5421';
-        else model = 'CM5411';
+    function getMaxDiscSize(rim, isFront) {
+      if (!rim) return "";
+      if (isFront) {
+        if (rim <= 16) return "290mm";
+        if (rim === 17) return "350mm";
+        if (rim === 18) return "380mm";
+        if (rim === 19) return "410mm";
+        if (rim >= 20) return "440mm";
+      } else {
+        if (rim === 18) return "380mm";
+        if (rim === 19) return "390mm";
+        if (rim >= 20) return "400mm";
       }
-      else if (r === 19) {
-        if (g === 'STREET' || g === 'SPORT') model = 'CF8621 / CF8622';
-        else model = 'CM8611';
-      }
-      else if (r === 20 || r === 21) {
-        if (g === 'STREET' || g === 'SPORT') model = 'CF8621 / CF8622';
-        else if (g === 'RACING') model = 'CM8611';
-        else model = 'CM9611'; // ULTRA default
-      }
-      else if (r === 22) {
-        if (g === 'STREET' || g === 'SPORT') model = 'CF8621 / CF8622'; 
-        else if (g === 'RACING') model = 'CM8611';
-        else model = 'CM9612'; // ULTRA 22
-      }
-      else if (r === 23) {
-        model = 'CM9612'; // Fixed big caliper
-      }
-      return FRONT_CALIPERS_DB.find(c => c.model === model) || FRONT_CALIPERS_DB[0];
     }
 
-    function processRearCaliper() {
-      if (config.hasEPB) return REAR_CALIPERS_DB.find(c => c.model === 'EB2221');
-      
-      let g = config.grade || 'SPORT';
-      let model = (g === 'STREET' || g === 'SPORT') ? 'CF2421' : 'CM2411';
-      return REAR_CALIPERS_DB.find(c => c.model === model) || REAR_CALIPERS_DB[0];
+    function processCaliperLogic() {
+      // Automatic Disc Assignment based on Rim
+      if(config.frontRim) config.frontDisc = getMaxDiscSize(config.frontRim, true);
+      if(config.rearRim) config.rearDisc = getMaxDiscSize(config.rearRim, false);
+
+      // Front Engine
+      if (config.position === 'front' || config.position === 'both') {
+        let r = config.frontRim;
+        let g = config.grade || 'SPORT'; 
+        let model = 'CF4421'; 
+        
+        if (r === 15 || r === 16) model = 'CF4421';
+        else if (r === 17) model = 'CM5411';
+        else if (r === 18) {
+          model = (g === 'STREET' || g === 'SPORT') ? 'CF5421' : 'CM5411';
+        }
+        else if (r === 19) {
+          model = (g === 'STREET' || g === 'SPORT') ? 'CF8621 / CF8622' : 'CM8611';
+        }
+        else if (r === 20 || r === 21) {
+          if (g === 'STREET' || g === 'SPORT') model = 'CF8621 / CF8622';
+          else if (g === 'RACING') model = 'CM8611';
+          else model = 'CM9611 / CM9612'; 
+        }
+        else if (r === 22) {
+          if (g === 'STREET' || g === 'SPORT') model = 'CF8621 / CF8622'; 
+          else if (g === 'RACING') model = 'CM8611';
+          else model = 'CM9611 / CM9612'; 
+        }
+        else if (r === 23) {
+          model = 'CM9611 / CM9612'; 
+        }
+        config.selectedFrontCaliper = FRONT_CALIPERS_DB.find(c => c.model === model) || FRONT_CALIPERS_DB[0];
+      }
+
+      // Rear Engine
+      if (config.position === 'rear' || config.position === 'both') {
+        let g = config.grade || 'SPORT';
+        let model = 'CF2421';
+        if (config.hasEPB) {
+          model = 'EB2221';
+        } else {
+          model = (g === 'STREET' || g === 'SPORT') ? 'CF2421' : 'CM2411';
+        }
+        config.selectedRearCaliper = REAR_CALIPERS_DB.find(c => c.model === model) || REAR_CALIPERS_DB[0];
+      }
     }
 
     function syncStateRibbons() {
@@ -407,6 +448,11 @@
     // ==========================================
     // WORKFLOW NAVIGATION
     // ==========================================
+    window.startConfig = function() {
+      playSfx('click');
+      navigateStep(1);
+    };
+
     window.selectPosition = function(pos) {
       config.position = pos;
       playSfx('click');
@@ -427,10 +473,8 @@
     window.toggleEPB = function(checked) {
       playSfx('click');
       config.hasEPB = checked;
-      // Constraint: 20-inch rim does not support EPB
       if (checked && config.rearRim === 20) {
         config.rearRim = null;
-        showToast(getT('epbWarning'));
       }
       syncStateRibbons();
       renderStepContent();
@@ -458,10 +502,10 @@
       // Generate clean report payload for email logic later
       let payloadText = `[CTE RACING PRECISION CONFIGURATION]\nName: ${userData.name}\nEmail: ${userData.email}\nVehicle Model: ${userData.car}\nUpgrade Layout: ${config.position.toUpperCase()}\nOEM Wheels: ${config.isOEM ? 'Yes' : 'No'}\n`;
       if (config.position === 'front' || config.position === 'both') {
-        payloadText += `\n[FRONT AXLE DATA]\nRim Diameter: ${config.frontRim}"\nMatched Caliper: ${config.selectedFrontCaliper.model}\nPad Model: ${config.selectedFrontCaliper.padModel}\n`;
+        payloadText += `\n[FRONT AXLE]\nRim Diameter: ${config.frontRim}"\nMatched Caliper: ${config.selectedFrontCaliper.model}\nMatched Rotor: ${config.frontDisc}\nPad Model: ${config.selectedFrontCaliper.padModel}\n`;
       }
       if (config.position === 'rear' || config.position === 'both') {
-        payloadText += `\n[REAR AXLE DATA]\nRim Diameter: ${config.rearRim}"\nEPB Equipped: ${config.hasEPB ? 'Yes' : 'No'}\nMatched Caliper: ${config.selectedRearCaliper.model}\nPad Model: ${config.selectedRearCaliper.padModel}\n`;
+        payloadText += `\n[REAR AXLE]\nRim Diameter: ${config.rearRim}"\nEPB Equipped: ${config.hasEPB ? 'Yes' : 'No'}\nMatched Caliper: ${config.selectedRearCaliper.model}\nMatched Rotor: ${config.rearDisc}\nPad Model: ${config.selectedRearCaliper.padModel}\n`;
       }
       
       const summaryDiv = document.getElementById('invoice-form-area');
@@ -474,7 +518,7 @@
             ${getT('buildRef')} CTE-X${Math.floor(100000 + Math.random() * 900000)}
           </h4>
           <p class="text-xs text-neutral-300 mt-2 max-w-sm mx-auto leading-relaxed">
-            Thank you, <strong class="text-apexOrange">${userData.name}</strong>! ${getT('successMsg')}
+            Thank you, <strong class="text-apexOrange">${userData.name}</strong>! <br/>${getT('successMsg')}
           </p>
           
           <div class="mt-5 text-left bg-black/40 border border-neutral-800 p-4 rounded-lg text-[10px] md:text-[11px] text-neutral-400 font-mono w-full whitespace-pre-wrap flex-grow overflow-auto max-h-[160px] shadow-inner">
@@ -491,8 +535,8 @@ ${payloadText}
 
     window.restartWorkflow = function() {
       playSfx('mechanical');
-      currentStep = 1;
-      config = { position: null, frontRim: null, rearRim: null, isOEM: true, hasEPB: false, grade: null, selectedFrontCaliper: null, selectedRearCaliper: null };
+      currentStep = 0;
+      config = { position: null, frontRim: null, rearRim: null, isOEM: true, hasEPB: false, grade: null, selectedFrontCaliper: null, selectedRearCaliper: null, frontDisc: null, rearDisc: null };
       userData = { name: '', email: '', car: '' };
       document.getElementById('total-step-num').innerText = TOTAL_STEPS;
       syncStateRibbons();
@@ -515,11 +559,9 @@ ${payloadText}
       // Logic Jump: Do we need Step 3 (Grade/Scenario)?
       let needsGrade = false;
       if (config.position === 'front' || config.position === 'both') {
-        // Only require scenario if wheel is 18-22
         if ([18, 19, 20, 21, 22].includes(config.frontRim)) needsGrade = true;
       }
       if (config.position === 'rear' || config.position === 'both') {
-        // If it has EPB, it goes to EB2221. Doesn't need grade.
         if (!config.hasEPB) needsGrade = true; 
       }
 
@@ -530,31 +572,102 @@ ${payloadText}
         next = 2; // Return to Rim
       }
 
-      if (next < 1 || next > TOTAL_STEPS) return;
+      if (next < 0 || next > TOTAL_STEPS) return;
       currentStep = next;
 
-      // Upon entering Step 4, definitively configure final setup via Logic Engine
       if (currentStep === 4) {
-        if (config.position === 'front' || config.position === 'both') config.selectedFrontCaliper = processFrontCaliper();
-        if (config.position === 'rear' || config.position === 'both') config.selectedRearCaliper = processRearCaliper();
+        processCaliperLogic();
       }
 
       playSfx('mechanical');
       renderStepContent();
     };
 
-    function renderStepContent() {
-      const dotsHTML = Array.from({length: TOTAL_STEPS}).map((_, i) => {
-        let stepIndex = i + 1;
-        if (stepIndex < currentStep) return `<div class="step-dot h-1.5 w-6 rounded-sm bg-racingRed transition-all duration-300"></div>`;
-        if (stepIndex === currentStep) return `<div class="step-dot h-1.5 w-12 rounded-sm bg-apexOrange transition-all duration-300 shadow-[0_0_8px_rgba(255,106,0,0.4)]"></div>`;
-        return `<div class="step-dot h-1.5 w-6 rounded-sm bg-neutral-800 transition-all duration-300"></div>`;
-      }).join('');
-      document.getElementById('progress-dots').innerHTML = dotsHTML;
+    function startCarousel() {
+      if (carouselTimer) clearInterval(carouselTimer);
+      let idx = 0;
+      let currentBg = 1;
+      const phrases = [getT('c1'), getT('c2'), getT('c3')];
+      
+      const textEl = document.getElementById('welcome-carousel-text');
+      const bgImg1 = document.getElementById('bg-carousel-img1');
+      const bgImg2 = document.getElementById('bg-carousel-img2');
+      
+      if (!textEl || !bgImg1 || !bgImg2) return;
+      
+      textEl.innerText = phrases[idx];
+      bgImg1.src = WELCOME_IMAGES[idx];
+      bgImg1.style.opacity = 1;
+      bgImg2.style.opacity = 0;
 
-      document.getElementById('current-step-num').innerText = currentStep;
-      document.getElementById('btn-back').style.opacity = currentStep === 1 ? '0.2' : '1';
-      document.getElementById('btn-next').style.display = (currentStep === TOTAL_STEPS || currentStep === 3) ? 'none' : 'block';
+      carouselTimer = setInterval(() => {
+        idx++;
+        if (document.getElementById('welcome-carousel-text')) {
+          const el = document.getElementById('welcome-carousel-text');
+          el.style.opacity = 0;
+          
+          const nextImgSrc = WELCOME_IMAGES[idx % WELCOME_IMAGES.length];
+          const nextPhrase = phrases[idx % phrases.length];
+
+          if (currentBg === 1) {
+            bgImg2.src = nextImgSrc;
+            bgImg2.style.opacity = 1;
+            bgImg1.style.opacity = 0;
+            currentBg = 2;
+          } else {
+            bgImg1.src = nextImgSrc;
+            bgImg1.style.opacity = 1;
+            bgImg2.style.opacity = 0;
+            currentBg = 1;
+          }
+
+          setTimeout(() => {
+            const updatedEl = document.getElementById('welcome-carousel-text');
+            if (updatedEl) {
+              updatedEl.innerText = nextPhrase;
+              updatedEl.style.opacity = 1;
+            }
+          }, 500);
+        }
+      }, 3000);
+    }
+
+    function renderStepContent() {
+      // 確保每次切換步驟時徹底清除背景輪播圖層及動畫計時器
+      if (currentStep !== 0) {
+        const bgCarousel = document.getElementById('bg-carousel');
+        if (bgCarousel) bgCarousel.remove();
+        if (carouselTimer) {
+          clearInterval(carouselTimer);
+          carouselTimer = null;
+        }
+      }
+
+      const progressHeader = document.getElementById('progress-header');
+      const navFooter = document.getElementById('nav-footer');
+      
+      if (currentStep === 0) {
+        progressHeader.classList.add('hidden');
+        progressHeader.classList.remove('flex');
+        navFooter.classList.add('hidden');
+        navFooter.classList.remove('flex');
+      } else {
+        progressHeader.classList.remove('hidden');
+        progressHeader.classList.add('flex');
+        navFooter.classList.remove('hidden');
+        navFooter.classList.add('flex');
+        
+        const dotsHTML = Array.from({length: TOTAL_STEPS}).map((_, i) => {
+          let stepIndex = i + 1;
+          if (stepIndex < currentStep) return `<div class="step-dot h-1.5 w-6 rounded-sm bg-racingRed transition-all duration-300"></div>`;
+          if (stepIndex === currentStep) return `<div class="step-dot h-1.5 w-12 rounded-sm bg-apexOrange transition-all duration-300 shadow-[0_0_8px_rgba(255,106,0,0.4)]"></div>`;
+          return `<div class="step-dot h-1.5 w-6 rounded-sm bg-neutral-800 transition-all duration-300"></div>`;
+        }).join('');
+        document.getElementById('progress-dots').innerHTML = dotsHTML;
+        document.getElementById('current-step-num').innerText = currentStep;
+        document.getElementById('btn-back').style.opacity = currentStep === 1 ? '0.2' : '1';
+        document.getElementById('btn-next').style.display = (currentStep === TOTAL_STEPS || currentStep === 3) ? 'none' : 'block';
+      }
 
       const contentBox = document.getElementById('step-content');
       contentBox.classList.remove('step-fade-in');
@@ -563,7 +676,33 @@ ${payloadText}
 
       let html = '';
 
-      if (currentStep === 1) {
+      if (currentStep === 0) {
+        html = `
+          <div id="bg-carousel" class="absolute inset-0 z-0 overflow-hidden rounded-2xl pointer-events-none">
+            <img id="bg-carousel-img1" src="${WELCOME_IMAGES[0]}" class="absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 ease-in-out opacity-100" />
+            <img id="bg-carousel-img2" src="" class="absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 ease-in-out opacity-0" />
+            <div class="absolute inset-0 bg-black/45"></div>
+            <div class="absolute inset-0" style="background: radial-gradient(circle, transparent 35%, #111316 100%);"></div>
+          </div>
+          <div class="relative z-10 flex flex-col items-center justify-center text-center py-16 md:py-24 min-h-[400px]">
+            <div class="mb-8 flex flex-col items-center relative px-10 py-8">
+  <div class="absolute inset-0 -z-10 rounded-full bg-black/45 blur-2xl scale-125"></div>
+              <h1 class="text-2xl md:text-4xl font-black uppercase tracking-tight text-white mb-6 drop-shadow-lg">
+                ${getT('welcomeTitle')}
+              </h1>
+              <div class="h-[60px] md:h-[40px] flex items-center justify-center px-4 max-w-2xl">
+                <p id="welcome-carousel-text" class="text-sm md:text-base text-neutral-300 font-light tracking-wide transition-opacity duration-500 ease-in-out opacity-100 drop-shadow-md"></p>
+              </div>
+            </div>
+            <button onclick="startConfig()" class="mt-8 bg-apexOrange hover:bg-orange-500 text-black font-mono font-black text-sm md:text-base uppercase px-12 py-4 rounded-xl shadow-[0_0_20px_rgba(255,106,0,0.3)] transition-all hover:scale-105 hover:shadow-[0_0_30px_rgba(255,106,0,0.5)]">
+              ${getT('startBtn')}
+            </button>
+          </div>
+        `;
+        setTimeout(() => startCarousel(), 50);
+      }
+
+      else if (currentStep === 1) {
         html = `
           <div class="space-y-4">
             <h2 class="text-xl md:text-2xl font-black uppercase tracking-tight text-white flex items-center gap-2">
@@ -592,7 +731,7 @@ ${payloadText}
                 <div class="text-[10px] font-mono text-neutral-500 mb-1">03 / ${getT('trackRec')}</div>
                 <div class="text-base font-black group-hover:text-apexOrange transition-colors uppercase">${getT('dualUpgrade')}</div>
                 <p class="text-[11px] text-neutral-500 mt-2 leading-relaxed">${getT('dualUpgradeDesc')}</p>
-                <div class="absolute bottom-3 right-3 text-neutral-700 font-mono text-xs group-hover:text-apexOrange transition-colors">03 ➔</div>
+                <div class="absolute bottom-3 right-3 text-neutral-700 font-mono text-xs group-hover:text-apexOrange transition-colors">ALL ➔</div>
               </button>
             </div>
           </div>
@@ -622,6 +761,7 @@ ${payloadText}
                       </button>
                     `).join('')}
                   </div>
+                  ${config.frontRim ? `<div class="mt-4 text-[11px] text-neutral-400 font-mono animate-fadeIn">${getT('maxDiscHint')}<strong class="text-apexOrange">${getMaxDiscSize(config.frontRim, true)}</strong></div>` : ''}
                 </div>
               ` : ''}
 
@@ -636,12 +776,12 @@ ${payloadText}
                       return `<button data-size="${size}" ${isDisabled ? 'disabled' : ''} onclick="selectRim('rear', ${size})" class="w-12 h-11 font-mono text-xs font-bold border rounded transition-all ${isDisabled ? 'opacity-20 cursor-not-allowed border-neutral-900' : (config.rearRim === size ? 'bg-racingRed text-white border-racingRed font-black shadow-lg scale-105' : 'bg-neutral-900/60 border-neutral-800 hover:border-neutral-700 text-neutral-300')}">${size}"</button>`
                     }).join('')}
                   </div>
+                  ${config.rearRim ? `<div class="mt-4 text-[11px] text-neutral-400 font-mono animate-fadeIn">${getT('maxDiscHint')}<strong class="text-racingRed">${getMaxDiscSize(config.rearRim, false)}</strong></div>` : ''}
                 </div>
               ` : ''}
 
               <!-- Vehicle Status Settings -->
-              <div class="bg-neutral-950/40 p-5 rounded-lg border border-neutral-850 flex flex-col gap-6">
-                <!-- OEM Question -->
+              <div class="bg-neutral-950/40 p-5 rounded-lg border border-neutral-850 flex flex-col gap-6 relative z-10">
                 <div>
                   <label class="block text-[11px] font-mono text-neutral-400 mb-3">${getT('qOEM')}</label>
                   <div class="flex gap-3">
@@ -650,7 +790,6 @@ ${payloadText}
                   </div>
                 </div>
                 
-                <!-- EPB Question -->
                 ${(config.position === 'rear' || config.position === 'both') ? `
                   <div class="border-t border-neutral-900 pt-4">
                     <label class="block text-[11px] font-mono text-neutral-400 mb-3">${getT('qEPB')}</label>
@@ -677,7 +816,7 @@ ${payloadText}
               ${getT('s3Desc')}
             </p>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-4">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-4 relative z-10">
               <button onclick="selectGrade('STREET')" class="w-full p-6 rounded-xl border text-left transition-all ${config.grade === 'STREET' ? 'border-apexOrange bg-neutral-900 shadow-[0_0_15px_rgba(255,106,0,0.1)]' : 'border-neutral-850 bg-neutral-900/40 hover:border-neutral-800'}">
                 <span class="block font-bold text-sm md:text-base text-neutral-100 mb-2">${getT('gradeStreet')}</span>
                 <p class="text-[11px] text-neutral-400 leading-relaxed">${getT('descStreet')}</p>
@@ -712,7 +851,7 @@ ${payloadText}
             <div class="grid grid-cols-1 md:grid-cols-12 gap-8 pt-4">
               
               <!-- Left: Form & Docs -->
-              <div id="invoice-form-area" class="md:col-span-7 flex flex-col justify-between">
+              <div id="invoice-form-area" class="md:col-span-7 flex flex-col justify-between relative z-10">
                 <div class="bg-black/80 border border-neutral-850 rounded-xl p-6 font-mono text-xs text-neutral-300 space-y-5 shadow-2xl">
                   
                   <div class="border-b border-dashed border-neutral-800 pb-4 mb-2 flex justify-between items-center">
@@ -731,6 +870,10 @@ ${payloadText}
                         <span class="text-neutral-100 font-bold tracking-wide">${config.selectedFrontCaliper?.model}</span>
                       </div>
                       <div class="flex justify-between text-xs">
+                        <span class="text-neutral-500">${getT('rotorProfile')}</span>
+                        <span class="text-neutral-100 font-bold tracking-wide">CCM ${config.frontDisc}</span>
+                      </div>
+                      <div class="flex justify-between text-xs">
                         <span class="text-neutral-500">${getT('padPart')}</span>
                         <span class="text-neutral-100 tracking-wide">${config.selectedFrontCaliper?.padModel}</span>
                       </div>
@@ -743,6 +886,10 @@ ${payloadText}
                       <div class="flex justify-between text-xs">
                         <span class="text-neutral-500">${getT('calModel')}</span>
                         <span class="text-neutral-100 font-bold tracking-wide">${config.selectedRearCaliper?.model}</span>
+                      </div>
+                      <div class="flex justify-between text-xs">
+                        <span class="text-neutral-500">${getT('rotorProfile')}</span>
+                        <span class="text-neutral-100 font-bold tracking-wide">CCM ${config.rearDisc}</span>
                       </div>
                       <div class="flex justify-between text-xs">
                         <span class="text-neutral-500">${getT('padPart')}</span>
@@ -796,7 +943,7 @@ ${payloadText}
               </div>
 
               <!-- Right: Visualizer -->
-              <div class="md:col-span-5 flex flex-col gap-5 relative h-full">
+              <div class="md:col-span-5 flex flex-col gap-5 relative h-full z-10">
                 <div class="text-[10px] md:text-xs font-mono text-neutral-500 uppercase tracking-widest border-b border-neutral-850 pb-2">
                   ${getT('dwgTitle')}
                 </div>
