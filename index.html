@@ -828,49 +828,36 @@ EPB：${config.hasEPB ? '是' : '否'}
         document.getElementById('invoice-form-area');
 
       summaryDiv.innerHTML = `
+  <div class="p-6 bg-emerald-950/20 border border-emerald-900/60 rounded-xl text-center animate-fadeIn flex flex-col h-full">
 
-        <div class="p-6 bg-emerald-950/20 border border-emerald-900/60 rounded-xl text-center animate-fadeIn flex flex-col items-center justify-start h-full">
+    <p class="text-lg md:text-2xl text-white font-black uppercase tracking-wide mt-2">
+      WE WILL CONTACT YOU SOON,
+      <strong class="text-apexOrange">${userData.name}</strong>!
+    </p>
 
-          <div class="inline-block bg-emerald-500 text-black text-[9px] font-bold font-mono px-3.5 py-1 rounded-full uppercase tracking-widest mb-3">
+    <p class="text-xs md:text-sm text-neutral-400 mt-3 max-w-lg mx-auto leading-relaxed">
+      ${getT('successMsg')}
+    </p>
 
-            ${getT('specTransmitted')}
+    <div class="mt-5 px-4 py-3 bg-neutral-950/60 border border-neutral-700 rounded-lg">
+      <p class="text-xs md:text-sm font-mono text-neutral-300">
+        <span class="text-apexOrange font-black text-base" id="redirect-countdown">15</span>
+        秒後將自動前往 CTE 官方網站
+      </p>
+    </div>
 
-          </div>
+    <div class="mt-5 text-left bg-black/40 border border-neutral-800 p-5 rounded-lg text-[10px] md:text-[11px] text-neutral-400 font-mono w-full flex-grow overflow-auto shadow-inner">
 
-          <p class="text-lg md:text-xl text-white mt-3 font-black uppercase tracking-wide">
+      <span class="text-emerald-500 font-bold block mb-3 text-left">
+        SYSTEM PAYLOAD TRANSMITTED:
+      </span>
 
-           Thank you, <strong class="text-apexOrange">${userData.name}</strong>!
+      <div class="whitespace-pre-wrap text-left leading-relaxed">${payloadText}</div>
 
-          </p>
-
-          <p class="text-xs md:text-sm text-neutral-400 mt-2 max-w-md mx-auto leading-relaxed">
-
-           ${getT('successMsg')}
-
-          </p>
-
-         <div class="mt-5 text-left bg-black/40 border border-neutral-800 p-5 rounded-lg text-[10px] md:text-[11px] text-neutral-400 font-mono w-full flex-1 min-h-[220px] shadow-inner">
-
-  <span class="text-emerald-500 font-bold block mb-3 text-left">
-
-    SYSTEM PAYLOAD TRANSMITTED:
-
-  </span>
-
-  <div class="whitespace-pre-wrap text-left leading-relaxed">
-
-${payloadText}
+    </div>
 
   </div>
-
-</div>
-</div>
-<p class="mt-5 text-[10px] font-mono text-neutral-500">
-
-  <span id="redirect-countdown">30</span> 秒後將自動前往 CTE Carbon Ceramic Brakes 官方網站
-
-</p>
-      `;
+`;
   let countdown = 30;
 
       const countdownTimer = setInterval(() => {
