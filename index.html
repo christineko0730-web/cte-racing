@@ -567,6 +567,46 @@
 
   // 產生 EmailJS 要使用的資料
 
+  let brakeConfiguration = '';
+
+if (config.position === 'front' || config.position === 'both') {
+
+  brakeConfiguration +=
+
+`前軸配置
+
+輪圈尺寸：${config.frontRim} 吋
+
+卡鉗型號：${config.selectedFrontCaliper?.model || '不適用'}
+
+碟盤尺寸：${config.frontDisc || '不適用'}
+
+來令片型號：${config.selectedFrontCaliper?.padModel || '不適用'}
+
+`;
+
+}
+
+if (config.position === 'rear' || config.position === 'both') {
+
+  brakeConfiguration +=
+
+`後軸配置
+
+輪圈尺寸：${config.rearRim} 吋
+
+EPB：${config.hasEPB ? '是' : '否'}
+
+卡鉗型號：${config.selectedRearCaliper?.model || '不適用'}
+
+碟盤尺寸：${config.rearDisc || '不適用'}
+
+來令片型號：${config.selectedRearCaliper?.padModel || '不適用'}
+
+`;
+
+}
+
   const templateParams = {
 
     submittedAt: new Date().toLocaleString(
@@ -596,6 +636,8 @@
     isOEM: config.isOEM ? '是' : '否',
 
     grade: config.grade || '不適用',
+    
+    configuration: brakeConfiguration,
 
     showFront:
 
