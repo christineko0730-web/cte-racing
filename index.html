@@ -246,9 +246,9 @@
         fullNamePlaceholder: "FULL NAME", emailPlaceholder: "EMAIL ADDRESS", carPlaceholder: "VEHICLE MODEL (e.g., Porsche 911 GT3 / 2024)",
         activateSoul: "SUBMIT PRECISION CONFIGURATION ➔",
         specTransmitted: "✓ SPECIFICATION BLUEPRINT TRANSMITTED", buildRef: "Chassis Build Reference:",
-        successMsg: "Your CCM configuration has been successfully submitted. The CTE team will review your configuration and contact you soon.",
-        restart: "Restart configuration",
+        successMsg: "Your CCM configuration request has been successfully submitted. The CTE team will contact you soon to confirm the detailed specifications and assist you with the next steps in the purchasing process.",
         
+
         // Warnings
         alertPosition: "Please select your brake upgrade position first.", alertFrontRim: "Please select Front Rim diameter.",
         alertRearRim: "Please select Rear Rim diameter.", alertGrade: "Please select your primary driving scenario.",
@@ -306,8 +306,8 @@
         fullNamePlaceholder: "您的姓名 / FULL NAME", emailPlaceholder: "您的信箱 / EMAIL ADDRESS", carPlaceholder: "您的車款型號 (例如：Porsche 911 GT3 / 2024)",
         activateSoul: "將我的配置傳送給 CTE 專業團隊 →",
         specTransmitted: "✓ 煞車配置技術藍圖已成功寄送", buildRef: "客製配置底盤編號:",
-        successMsg: "您的 CCM 配置已成功送出。CTE 專業團隊將儘快與您聯繫。",
-        restart: "重新進行配置",
+        successMsg: "您的 CCM 配置需求已成功送出。CTE 專業團隊將儘快與您聯繫，協助確認詳細規格與後續購買流程。",
+       
         
         // Warnings
         alertPosition: "請先選擇您的煞車升級位置。", alertFrontRim: "請選擇您的前輪圈直徑尺寸。",
@@ -636,7 +636,7 @@ EPB：${config.hasEPB ? '是' : '否'}
     isOEM: config.isOEM ? '是' : '否',
 
     grade: config.grade || '不適用',
-    
+
     configuration: brakeConfiguration,
 
     showFront:
@@ -829,7 +829,7 @@ EPB：${config.hasEPB ? '是' : '否'}
 
       summaryDiv.innerHTML = `
 
-        <div class="p-6 bg-emerald-950/20 border border-emerald-900/60 rounded-xl text-center animate-fadeIn flex flex-col items-center justify-center h-full">
+        <div class="p-6 bg-emerald-950/20 border border-emerald-900/60 rounded-xl text-center animate-fadeIn flex flex-col items-center justify-start h-full">
 
           <div class="inline-block bg-emerald-500 text-black text-[9px] font-bold font-mono px-3.5 py-1 rounded-full uppercase tracking-widest mb-3">
 
@@ -837,57 +837,64 @@ EPB：${config.hasEPB ? '是' : '否'}
 
           </div>
 
-          <h4 class="font-mono text-xs text-emerald-400 uppercase tracking-wider mb-1">
+          <p class="text-lg md:text-xl text-white mt-3 font-black uppercase tracking-wide">
 
-            ${getT('buildRef')}
-
-            CTE-X${Math.floor(100000 + Math.random() * 900000)}
-
-          </h4>
-
-          <p class="text-xs text-neutral-300 mt-2 max-w-sm mx-auto leading-relaxed">
-
-            Thank you,
-
-            <strong class="text-apexOrange">
-
-              ${userData.name}
-
-            </strong>!
-
-            <br/>
-
-            ${getT('successMsg')}
+           Thank you, <strong class="text-apexOrange">${userData.name}</strong>!
 
           </p>
 
-          <div class="mt-5 text-left bg-black/40 border border-neutral-800 p-4 rounded-lg text-[10px] md:text-[11px] text-neutral-400 font-mono w-full whitespace-pre-wrap flex-grow overflow-auto max-h-[160px] shadow-inner">
+          <p class="text-xs md:text-sm text-neutral-400 mt-2 max-w-md mx-auto leading-relaxed">
 
-            <span class="text-emerald-500 font-bold block mb-2">
+           ${getT('successMsg')}
 
-              SYSTEM PAYLOAD TRANSMITTED:
+          </p>
 
-            </span>
+         <div class="mt-5 text-left bg-black/40 border border-neutral-800 p-5 rounded-lg text-[10px] md:text-[11px] text-neutral-400 font-mono w-full flex-1 min-h-[220px] shadow-inner">
+
+  <span class="text-emerald-500 font-bold block mb-3 text-left">
+
+    SYSTEM PAYLOAD TRANSMITTED:
+
+  </span>
+
+  <div class="whitespace-pre-wrap text-left leading-relaxed">
 
 ${payloadText}
 
-          </div>
+  </div>
 
-          <button
+</div>
+</div>
+<p class="mt-5 text-[10px] font-mono text-neutral-500">
 
-            onclick="restartWorkflow()"
+  <span id="redirect-countdown">30</span> 秒後將自動前往 CTE Carbon Ceramic Brakes 官方網站
 
-            class="mt-5 font-mono text-[9px] uppercase text-neutral-500 hover:text-white border border-neutral-800 px-4 py-2.5 rounded transition-colors bg-black/40"
-
-          >
-
-            ${getT('restart')}
-
-          </button>
-
-        </div>
-
+</p>
       `;
+  let countdown = 30;
+
+      const countdownTimer = setInterval(() => {
+
+        countdown--;
+
+        const countdownElement = document.getElementById('redirect-countdown');
+
+        if (countdownElement) {
+
+          countdownElement.innerText = countdown;
+
+        }
+
+        if (countdown <= 0) {
+
+          clearInterval(countdownTimer);
+
+          window.location.href = 'https://www.brakes-ccb.com/';
+
+        }
+
+      }, 1000);    
+    
 
     })
 
