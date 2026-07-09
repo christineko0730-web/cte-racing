@@ -4,6 +4,29 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>CTE RACING Carbon Ceramic Brake System Configurator</title>
+  <!-- EmailJS -->
+
+  <script
+
+    type="text/javascript"
+
+    src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js">
+
+  </script>
+
+  <script type="text/javascript">
+
+    (function() {
+
+      emailjs.init({
+
+        publicKey: "lb7j3fgSc06Ra2-iW"
+
+      });
+
+    })();
+
+  </script>
   
   <!-- Tailwind CSS Play CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -501,49 +524,356 @@
 
     window.submitCCMBuild = function() {
       const nameInput = document.getElementById('user-name').value.trim();
-      const emailInput = document.getElementById('user-email').value.trim();
-      const carInput = document.getElementById('user-car').value.trim();
-      
-      if (!nameInput || !emailInput || !carInput) {
-        showToast(getT('alertContact'));
-        return;
-      }
-      
-      userData = { name: nameInput, email: emailInput, car: carInput };
+
+  const emailInput = document.getElementById('user-email').value.trim();
+
+  const carInput = document.getElementById('user-car').value.trim();
+
+  if (!nameInput || !emailInput || !carInput) {
+
+    showToast(getT('alertContact'));
+
+    return;
+
+  }
+
+  userData = {
+
+    name: nameInput,
+
+    email: emailInput,
+
+    car: carInput
+
+  };
+
+  // 避免使用者重複點擊送出按鈕
+
+  const submitButton = document.querySelector(
+
+    'button[onclick="submitCCMBuild()"]'
+
+  );
+
+  if (submitButton) {
+
+    submitButton.disabled = true;
+
+    submitButton.innerText =
+
+      activeLang === 'zh' ? '正在寄送...' : 'SENDING...';
+
+  }
+
+  // 產生 EmailJS 要使用的資料
+
+  const templateParams = {
+
+    submittedAt: new Date().toLocaleString(
+
+      activeLang === 'zh' ? 'zh-TW' : 'en-US'
+
+    ),
+
+    name: userData.name,
+
+    email: userData.email,
+
+    car: userData.car,
+
+    positionLabel:
+
+      config.position === 'front'
+
+        ? '前輪'
+
+        : config.position === 'rear'
+
+        ? '後輪'
+
+        : '前後輪',
+
+    isOEM: config.isOEM ? '是' : '否',
+
+    grade: config.grade || '不適用',
+
+    showFront:
+
+      config.position === 'front' ||
+
+      config.position === 'both'
+
+        ? 'YES'
+
+        : '',
+
+    showRear:
+
+      config.position === 'rear' ||
+
+      config.position === 'both'
+
+        ? 'YES'
+
+        : '',
+
+    frontRim:
+
+      config.frontRim
+
+        ? `${config.frontRim} 吋`
+
+        : '不適用',
+
+    frontCaliper:
+
+      config.selectedFrontCaliper?.model ||
+
+      '不適用',
+
+    frontDisc:
+
+      config.frontDisc ||
+
+      '不適用',
+
+    frontPad:
+
+      config.selectedFrontCaliper?.padModel ||
+
+      '不適用',
+
+    rearRim:
+
+      config.rearRim
+
+        ? `${config.rearRim} 吋`
+
+        : '不適用',
+
+    hasEPB:
+
+      config.position === 'rear' ||
+
+      config.position === 'both'
+
+        ? config.hasEPB
+
+          ? '是'
+
+          : '否'
+
+        : '不適用',
+
+    rearCaliper:
+
+      config.selectedRearCaliper?.model ||
+
+      '不適用',
+
+    rearDisc:
+
+      config.rearDisc ||
+
+      '不適用',
+
+    rearPad:
+
+      config.selectedRearCaliper?.padModel ||
+
+      '不適用'
+
+  };
+
+  // 寄送 Email
+
+  emailjs
+
+    .send(
+
+      'service_nfv3sv4',
+
+      'template_tcijs4b',
+
+      templateParams
+
+    )
+
+    .then(function(response) {
+
+      console.log('EmailJS Success:', response);
+
       playSfx('success');
-      
-      // Generate clean report payload for email logic later
-      let payloadText = `[CTE RACING PRECISION CONFIGURATION]\nName: ${userData.name}\nEmail: ${userData.email}\nVehicle Model: ${userData.car}\nUpgrade Layout: ${config.position.toUpperCase()}\nOEM Wheels: ${config.isOEM ? 'Yes' : 'No'}\n`;
-      if (config.position === 'front' || config.position === 'both') {
-        payloadText += `\n[FRONT AXLE]\nRim Diameter: ${config.frontRim}"\nMatched Caliper: ${config.selectedFrontCaliper.model}\nMatched Rotor: ${config.frontDisc}\nPad Model: ${config.selectedFrontCaliper.padModel}\n`;
+
+      // 寄送成功提示
+
+      alert(
+
+        activeLang === 'zh'
+
+          ? '✓ Email 已成功寄出！'
+
+          : '✓ Email sent successfully!'
+
+      );
+
+      // 產生原本成功頁面裡的 Payload
+
+      let payloadText =
+
+        `[CTE RACING PRECISION CONFIGURATION]\n` +
+
+        `Name: ${userData.name}\n` +
+
+        `Email: ${userData.email}\n` +
+
+        `Vehicle Model: ${userData.car}\n` +
+
+        `Upgrade Layout: ${config.position.toUpperCase()}\n` +
+
+        `OEM Wheels: ${config.isOEM ? 'Yes' : 'No'}\n`;
+
+      if (
+
+        config.position === 'front' ||
+
+        config.position === 'both'
+
+      ) {
+
+        payloadText +=
+
+          `\n[FRONT AXLE]\n` +
+
+          `Rim Diameter: ${config.frontRim}"\n` +
+
+          `Matched Caliper: ${config.selectedFrontCaliper.model}\n` +
+
+          `Matched Rotor: ${config.frontDisc}\n` +
+
+          `Pad Model: ${config.selectedFrontCaliper.padModel}\n`;
+
       }
-      if (config.position === 'rear' || config.position === 'both') {
-        payloadText += `\n[REAR AXLE]\nRim Diameter: ${config.rearRim}"\nEPB Equipped: ${config.hasEPB ? 'Yes' : 'No'}\nMatched Caliper: ${config.selectedRearCaliper.model}\nMatched Rotor: ${config.rearDisc}\nPad Model: ${config.selectedRearCaliper.padModel}\n`;
+
+      if (
+
+        config.position === 'rear' ||
+
+        config.position === 'both'
+
+      ) {
+
+        payloadText +=
+
+          `\n[REAR AXLE]\n` +
+
+          `Rim Diameter: ${config.rearRim}"\n` +
+
+          `EPB Equipped: ${config.hasEPB ? 'Yes' : 'No'}\n` +
+
+          `Matched Caliper: ${config.selectedRearCaliper.model}\n` +
+
+          `Matched Rotor: ${config.rearDisc}\n` +
+
+          `Pad Model: ${config.selectedRearCaliper.padModel}\n`;
+
       }
-      
-      const summaryDiv = document.getElementById('invoice-form-area');
+
+      // 顯示你原本的綠色「已傳送」頁面
+
+      const summaryDiv =
+
+        document.getElementById('invoice-form-area');
+
       summaryDiv.innerHTML = `
+
         <div class="p-6 bg-emerald-950/20 border border-emerald-900/60 rounded-xl text-center animate-fadeIn flex flex-col items-center justify-center h-full">
+
           <div class="inline-block bg-emerald-500 text-black text-[9px] font-bold font-mono px-3.5 py-1 rounded-full uppercase tracking-widest mb-3">
+
             ${getT('specTransmitted')}
-          </div>
-          <h4 class="font-mono text-xs text-emerald-400 uppercase tracking-wider mb-1">
-            ${getT('buildRef')} CTE-X${Math.floor(100000 + Math.random() * 900000)}
-          </h4>
-          <p class="text-xs text-neutral-300 mt-2 max-w-sm mx-auto leading-relaxed">
-            Thank you, <strong class="text-apexOrange">${userData.name}</strong>! <br/>${getT('successMsg')}
-          </p>
-          
-          <div class="mt-5 text-left bg-black/40 border border-neutral-800 p-4 rounded-lg text-[10px] md:text-[11px] text-neutral-400 font-mono w-full whitespace-pre-wrap flex-grow overflow-auto max-h-[160px] shadow-inner">
-            <span class="text-emerald-500 font-bold block mb-2">SYSTEM PAYLOAD READY FOR TRANSMISSION:</span>
-${payloadText}
+
           </div>
 
-          <button onclick="restartWorkflow()" class="mt-5 font-mono text-[9px] uppercase text-neutral-500 hover:text-white border border-neutral-800 px-4 py-2.5 rounded transition-colors bg-black/40">
+          <h4 class="font-mono text-xs text-emerald-400 uppercase tracking-wider mb-1">
+
+            ${getT('buildRef')}
+
+            CTE-X${Math.floor(100000 + Math.random() * 900000)}
+
+          </h4>
+
+          <p class="text-xs text-neutral-300 mt-2 max-w-sm mx-auto leading-relaxed">
+
+            Thank you,
+
+            <strong class="text-apexOrange">
+
+              ${userData.name}
+
+            </strong>!
+
+            <br/>
+
+            ${getT('successMsg')}
+
+          </p>
+
+          <div class="mt-5 text-left bg-black/40 border border-neutral-800 p-4 rounded-lg text-[10px] md:text-[11px] text-neutral-400 font-mono w-full whitespace-pre-wrap flex-grow overflow-auto max-h-[160px] shadow-inner">
+
+            <span class="text-emerald-500 font-bold block mb-2">
+
+              SYSTEM PAYLOAD TRANSMITTED:
+
+            </span>
+
+${payloadText}
+
+          </div>
+
+          <button
+
+            onclick="restartWorkflow()"
+
+            class="mt-5 font-mono text-[9px] uppercase text-neutral-500 hover:text-white border border-neutral-800 px-4 py-2.5 rounded transition-colors bg-black/40"
+
+          >
+
             ${getT('restart')}
+
           </button>
+
         </div>
+
       `;
+
+    })
+
+    .catch(function(error) {
+
+      console.error('EmailJS Error:', error);
+
+      alert(
+
+        activeLang === 'zh'
+
+          ? 'Email 寄送失敗，請稍後再試。'
+
+          : 'Failed to send email. Please try again.'
+
+      );
+
+      // 如果寄送失敗，恢復按鈕
+
+      if (submitButton) {
+
+        submitButton.disabled = false;
+
+        submitButton.innerText = getT('activateSoul');
+
+      }
+
+    });
     };
 
     window.restartWorkflow = function() {
