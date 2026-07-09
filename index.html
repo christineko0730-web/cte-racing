@@ -168,7 +168,7 @@
         // Step 1
         s1Title: "Select Your Brake Upgrade Layout",
         s1Desc: "Select the axle configuration for your CCM Carbon Ceramic Brake System upgrade.",
-        axleFront: "AXLE FRONT", axleRear: "AXLE REAR", trackRec: "TRACK RECOMMENDATION",
+        axleFront: "AXLE FRONT", axleRear: "AXLE REAR", trackRec: "FRONT & REAR AXLES",
         frontUpgrade: "Front Upgrade Only", frontUpgradeDesc: "Replace front calipers and discs for primary high-speed stopping power.",
         rearUpgrade: "Rear Upgrade Only", rearUpgradeDesc: "Upgrade rear systems. Supports advanced electronic EPB configurations.",
         dualUpgrade: "Dual Axle Upgrade", dualUpgradeDesc: "Upgrade front & rear axles simultaneously for optimized braking stability.",
@@ -589,7 +589,7 @@ ${payloadText}
               </button>
 
               <button onclick="selectPosition('both')" class="group relative p-5 rounded-lg border text-left transition-all duration-200 bg-neutral-900/60 ${config.position === 'both' ? 'border-apexOrange shadow-[0_0_20px_rgba(255,106,0,0.15)] bg-neutral-900' : 'border-neutral-850 hover:border-neutral-850'}">
-                <div class="text-[10px] font-mono text-racingRed mb-1 font-bold">${getT('trackRec')}</div>
+                <div class="text-[10px] font-mono text-neutral-500 mb-1">03 / ${getT('trackRec')}</div>
                 <div class="text-base font-black group-hover:text-apexOrange transition-colors uppercase">${getT('dualUpgrade')}</div>
                 <p class="text-[11px] text-neutral-500 mt-2 leading-relaxed">${getT('dualUpgradeDesc')}</p>
                 <div class="absolute bottom-3 right-3 text-neutral-700 font-mono text-xs group-hover:text-racingRed transition-colors">ALL ➔</div>
